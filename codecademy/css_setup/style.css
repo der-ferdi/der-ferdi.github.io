@@ -10,8 +10,9 @@ h2.destination {
     font-family: cursive;
 }
 
-h5 {
-    color: rebeccapurple;
+h5,
+p {
+    font-family: Georgia;
 }
 
 .title {
