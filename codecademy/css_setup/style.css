@@ -10,12 +10,20 @@ h2.destination {
     font-family: cursive;
 }
 
+h5 {
+    color: rebeccapurple;
+}
+
 .title {
     color: teal;
 }
 
 .uppercase {
     text-transform: uppercase;
+}
+
+.publish-time {
+    color: gray;
 }
 
 .cursive {
@@ -26,6 +34,6 @@ h2.destination {
     text-transform: capitalize;
 }
 
-.publish-time {
-    color: gray;
+.description h5 {
+    color: teal;
 }
