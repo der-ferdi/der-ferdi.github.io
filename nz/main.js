@@ -28,7 +28,7 @@ const map = L.map("map", {
  ROUTE.sort((stop1, stop2) => {
      return stop1.nr > stop2.nr
  });
- 
+
  
   for (let entry of ROUTE) {
       //console.log(entry);
@@ -50,6 +50,19 @@ const map = L.map("map", {
         
   
     }
+
+
+
+
+    nav.onchange = (evt) => {
+        let selected = evt.target.selectedIndex;
+        let options = evt.target.options;
+        let username =options[selected].value;
+        let link = `https://${username}.github.io/nz/index.html`;
+        console.log(username, link);
+
+        window.location.href = link;
+    };
 
   
   console.log(document.querySelector("#map"));
