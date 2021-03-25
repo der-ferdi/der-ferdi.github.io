@@ -1,5 +1,3 @@
-console.log("Hello World!");
-console.log(L);
 
 const map = L.map("map", {
 center: [-43.733333, 170.095556],
@@ -8,7 +6,12 @@ layers: [
     L.titleLayer("https://{s}.title.openstreetmap.org/{z}/{x}/{y}.png")
 ]
 });
-//-43.733333, 170.095556
+
+let mrk = L.marker([-43.733333, 170.095556]) .addTo(map);
+mrk.bindPopup("Tongariro National Park") .openPopup();
+
+
+
 console.log(document.querySelector("#map"));
 
 
