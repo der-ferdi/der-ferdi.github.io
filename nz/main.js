@@ -27,7 +27,12 @@ const map = L.map("map", {
       mrk.bindPopup(`
         <h4>Stop ${entry.nr}: ${entry.name}</h4>
         <p><i class="fas fa-external-link-alt mr-3"></i><a href=${entry.wikipedia}">Read about stop in Wikipedia</a></p>
-        `).openPopup();
+      `);
+
+        if (entry.nr == 22) {
+            map.setView([entry.lat, entry.lng], 13);
+            mrk.openPopup();
+        }
         
   
     }
