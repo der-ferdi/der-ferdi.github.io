@@ -1,8 +1,18 @@
 
+let stop = {
+    nr: 22,
+    name: "Tongariro National Park", 
+    lat: -43.733333,
+    lng: 170.095556,
+    user: "der-ferdi",
+    wikipedia: "https://en.wikipedia.org/wiki/Mount_Cook_Village"
+};
+
+
 
 
 const map = L.map("map", {
-    center: [-43.733333, 170.095556],
+    center: [ stop.lat, stop. lng],
     zoom: 13,
     layers: [
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
