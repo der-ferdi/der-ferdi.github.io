@@ -46,7 +46,8 @@ fetch(awsUrl)
             <li>Windgeschwindigkeit: ${station.properties.WG || '?'} km/h</li>
             <li>Windgeschwindrichtung: ${station.properties.WR || '?'}</li>
 
-                </ul>
+            </ul>
+            <a target="_blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
             marker.addTo(awsLayer);
         }
