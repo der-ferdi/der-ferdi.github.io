@@ -18,7 +18,7 @@ let layerControl = L.control.layers({
     ])
 }).addTo(map);
 
-
+//Einbezug der Wetterdaten
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
 
 let awsLayer = L.featureGroup();
@@ -31,9 +31,9 @@ let windLayer = L.featureGroup();
 layerControl.addOverlay(windLayer, "Windgeschwindigkeit (km/h)");
 windLayer.addTo(map);
 
-
+//Lädt Daten und verarbeitet sie weiter
 fetch(awsUrl)
-    .then(response => response.json())
+    .then(response => response.json()) //Antwort wird in json konvertiert
     .then(json => {
         console.log('Daten konvertiert: ', json);
         for (station of json.features) {
