@@ -27,10 +27,38 @@ h2 {
         -1px -1px 0 white;
 }
 
-.snow-100, .wind-10, .temp-neg {
+.snow-100, .wind-10 {
     background-color: blue;
 }
 
-.snow-200, .wind-20, .temp.pos {
+.snow-200, .wind-20 {
     background-color: red;
+}
+
+.temp-neg {
+    font-size: 1.25em;
+    font-weight: bold;
+    display: inline;
+    padding: 0,3em;
+    border: 1px solid black;
+    background-color: blue;
+    text-shadow:
+    -1px -1px 0 white,
+    -1px -1px 0 white,
+    -1px -1px 0 white,
+    -1px -1px 0 white;
+}
+
+temp.pos {
+    font-size: 1.25em;
+    font-weight: bold;
+    display: inline;
+    padding: 0,3em;
+    border: 1px solid black;
+    background-color: red;
+    text-shadow:
+    -1px -1px 0 white,
+    -1px -1px 0 white,
+    -1px -1px 0 white,
+    -1px -1px 0 white;
 }
