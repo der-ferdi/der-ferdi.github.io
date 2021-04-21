@@ -120,10 +120,10 @@ fetch(awsUrl)
                 }
                 //https://leafletjs.com/reference-1.7.1.html#divicon
                 let tempIcon = L.divIcon({
-                    html: '<div class="temp-label ${tempHighlightClass}">${station.properties.LT}</div>',
+                    html: `<div class="temp-label ${tempHighlightClass}">${station.properties.LT}</div>`,
                 });
                 //https://leafletjs.com/reference-1.7.1.html#marker
-                let tempIcon = L.marker([
+                let tempMarker = L.marker([
                     station.geometry.coordinates[1],
                     station.geometry.coordinates[0]
                 ], {
