@@ -93,6 +93,27 @@ fetch(awsUrl)
                     icon: windIcon
                 });
                 windMarker.addTo(windLayer);
+                
+                //ab hier mein Versuch
+            }
+            if (station.properties.LT) {
+                let tempHighlightClass = '';
+                if (station.properties.LT >= 0) {
+                    tempHighlightClass = 'temp-pos';
+                }
+                if (station.properties.LT <= 0) {
+                    tempHighlightClass = 'temp-neg';
+                }
+                let tempIcon = L.divIcon({
+                    html: '<div class="temp-label ${tempHighlightClass}">${station.properties.LT}</div>',
+                });
+                let tempIcon = L.marker([
+                    station.geometry.coordinates[1],
+                    station.geometry.coordinates[0]
+                ], {
+                    icon: tempIcon
+                });
+                tempMarker.addTo(tempLayer);
             }
         }
         // set map view to all stations
