@@ -35,6 +35,10 @@ layerControl.addOverlay(snowLayer, "Schneehöhen (cm)");
 let windLayer = L.featureGroup();
 layerControl.addOverlay(windLayer, "Windgeschwindigkeit (km/h)");
 windLayer.addTo(map);
+//Temperatur
+let tempLayer = L.featureGroup();
+layerControl.addOverlay(tempLayer, "Lufttemperatur");
+tempLayer.addTo(map);
 
 //Lädt Daten und verarbeitet sie weiter
 fetch(awsUrl)
