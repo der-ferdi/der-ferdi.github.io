@@ -44,7 +44,12 @@ L.control.scale({
     imperial: false
 }).addTo(map);
 
+let getColor = (value, colorRamp) => {
+
+};
+
 let newLabel = (coords, options) => {
+    let color = getColor(options.value, options.colors)
     let label = L.divIcon({
         html: `<div>${options.value}</div>`,
         className: "text-label"
@@ -86,47 +91,25 @@ fetch(awsUrl)
             <a target="_blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
             marker.addTo(overlays.stations);
+            
             if (typeof station.properties.HS == "number") {
-                let highlightClass = '';
-                if (station.properties.HS > 100) {
-                    highlightClass = 'snow-100';
-                }
-                if (station.properties.HS > 200) {
-                    highlightClass = 'snow-200';
-                }
-                let snowIcon = L.divIcon({
-                    html: `<div class="snow-label ${highlightClass}">${station.properties.HS}</div>`
-                })
-                let snowMarker = L.marker([
-                    station.geometry.coordinates[1],
-                    station.geometry.coordinates[0]
-                ], {
-                    icon: snowIcon
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.HS,
+                    colors: COLORS.snowheight
                 });
-                snowMarker.addTo(overlays.snowheight);
+                marker.addTo(overlays.snowheight);
             }
             if (typeof station.properties.WG == "number") {
-                let windHighlightClass = '';
-                if (station.properties.WG > 10) {
-                    windHighlightClass = 'wind-10';
-                }
-                if (station.properties.WG > 20) {
-                    windHighlightClass = 'wind-20';
-                }
-                let windIcon = L.divIcon({
-                    html: `<div class="wind-label ${windHighlightClass}">${station.properties.WG}</div>`,
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.WG,
+                    colors: COLORS.windspeed
                 });
-                let windMarker = L.marker([
-                    station.geometry.coordinates[1],
-                    station.geometry.coordinates[0]
-                ], {
-                    icon: windIcon
-                });
-                windMarker.addTo(overlays.windspeed);
+                marker.addTo(overlays.windspeed);
             }
             if (typeof station.properties.LT == "number") {
                 let marker = newLabel(station.geometry.coordinates, {
                     value: station.properties.LT
+                    colors: COLORS.temperature
                 });
                 marker.addTo(overlays.temperature);
             }
