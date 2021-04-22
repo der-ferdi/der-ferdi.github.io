@@ -11,7 +11,7 @@ let map = L.map("map", {
 });
 
 //https://leafletjs.com/reference-1.7.1.html#control
-let.overlays = {
+let overlays = {
     stations: L.featureGroup(),
     temperature: L.featureGroup(),
     snowheight: L.featureGroup(),
@@ -35,8 +35,13 @@ let layerControl = L.control.layers({
     "Schneehöhe (cm)": overlays.snowheight,
     "Windgeschwindigkeit (km/h)": overlays.windspeed,
     "Windrichtung": overlays.winddirection
+}, {
+    collapsed: false  //dauerhaftes Ausklappen des Kontrollelements
 }).addTo(map);
 overlays.temperature.addTo(map);
+//Maßstab einbauen
+L.control.scale().addTo(map);
+
 
 //Einbezug der Wetterdaten
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
