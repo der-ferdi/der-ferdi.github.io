@@ -25,7 +25,7 @@ const COLORS = {
         col: "#9664ff"
     }, {
         min: 80,
-        max: 999,
+        max: 99999,
         col: "#ff3232"
     }],
     temperature: [{
