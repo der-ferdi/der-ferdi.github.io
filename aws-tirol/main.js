@@ -40,7 +40,9 @@ let layerControl = L.control.layers({
 }).addTo(map);
 overlays.temperature.addTo(map);
 //Maßstab einbauen
-L.control.scale().addTo(map);
+L.control.scale({
+    imperial: false
+}).addTo(map);
 
 
 //Einbezug der Wetterdaten
@@ -75,7 +77,7 @@ fetch(awsUrl)
             <a target="_blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
             marker.addTo(overlays.station);
-            if (station.properties.HS) {
+            if (typeof station.properties.HS == "numbers") {
                 let highlightClass = '';
                 if (station.properties.HS > 100) {
                     highlightClass = 'snow-100';
@@ -96,7 +98,7 @@ fetch(awsUrl)
                 });
                 snowMarker.addTo(overlays.snowheight);
             }
-            if (station.properties.WG) {
+            if (typeof station.properties.WG == "number") {
                 let windHighlightClass = '';
                 if (station.properties.WG > 10) {
                     windHighlightClass = 'wind-10';
@@ -119,7 +121,7 @@ fetch(awsUrl)
 
                 //ab hier mein Versuch
             }
-            if (station.properties.LT) {
+            if (typeof station.properties.LT =="number") {
                 let tempHighlightClass = '';
                 if (station.properties.LT >= 0) {
                     tempHighlightClass = 'temp-pos';
