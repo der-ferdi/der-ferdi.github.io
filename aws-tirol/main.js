@@ -1,7 +1,7 @@
-//https://leafletjs.com/reference-1.7.1.html#tilelayer
+// https://leafletjs.com/reference-1.7.1.html#tilelayer
 let basemapGray = L.tileLayer.provider('BasemapAT.grau');
 
-//https://leafletjs.com/reference-1.7.1.html#map
+// https://leafletjs.com/reference-1.7.1.html#map
 let map = L.map("map", {
     center: [47, 11],
     zoom: 9,
@@ -10,7 +10,7 @@ let map = L.map("map", {
     ]
 });
 
-//https://leafletjs.com/reference-1.7.1.html#control
+// https://leafletjs.com/reference-1.7.1.html#control
 let overlays = {
     stations: L.featureGroup(),
     temperature: L.featureGroup(),
@@ -19,7 +19,7 @@ let overlays = {
     winddirection: L.featureGroup()
 };
 
- //https://leafletjs.com/reference-1.7.1.html#tilelayer
+ // https://leafletjs.com/reference-1.7.1.html#tilelayer
  let layerControl = L.control.layers({
     "BasemapAT.grau": basemapGray,
     "BasemapAT.orthofoto": L.tileLayer.provider('BasemapAT.orthofoto'),
@@ -35,39 +35,39 @@ let overlays = {
     "Windgeschwindigkeit (km/h)":  overlays.windspeed,
     "Windrichtung": overlays.winddirection
 }, {
-    collapsed: false  //dauerhaftes Ausklappen des Kontrollelements
+    collapsed: false  // dauerhaftes Ausklappen des Kontrollelements
 }).addTo(map);
 overlays.temperature.addTo(map);
 
-//Maßstab einbauen
+// Maßstab einbauen
 L.control.scale({
     imperial: false
 }).addTo(map);
 
 let newLabel = (coords, options) => {
-    console.log("Koordinaten coords: ", coords);
-    console.log("Optionsobjekt:", options);
-    let marker = L.marker([coords[1], coords[0]]);
-    console.log("Marker:", marker);
+    let label = L.divIcon({
+        html: `<div>${options.value}</div>`,
+        className: "text-label"
+    })
+    let marker = L.marker([coords[1], coords[0]], {
+        icon: label
+    });
     return marker;
 };
-    //Label erstellen
-    //den Label zurückgeben
+    // Label erstellen
+    // den Label zurückgeben
 
-//Einbezug der Wetterdaten
+// Einbezug der Wetterdaten
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
 
-
-
-
-//Lädt Daten und verarbeitet sie weiter
+// Lädt Daten und verarbeitet sie weiter
 fetch(awsUrl)
     .then(response => response.json())
     .then(json => {
         console.log('Daten konvertiert: ', json);
         for (station of json.features) {
             // console.log('Station: ', station);
-            //https://leafletjs.com/reference-1.7.1.html#marker
+            // https://leafletjs.com/reference-1.7.1.html#marker
             let marker = L.marker([
                 station.geometry.coordinates[1],
                 station.geometry.coordinates[0]
@@ -94,11 +94,9 @@ fetch(awsUrl)
                 if (station.properties.HS > 200) {
                     highlightClass = 'snow-200';
                 }
-                //https://leafletjs.com/reference-1.7.1.html#divicon
                 let snowIcon = L.divIcon({
                     html: `<div class="snow-label ${highlightClass}">${station.properties.HS}</div>`
                 })
-                //https://leafletjs.com/reference-1.7.1.html#marker
                 let snowMarker = L.marker([
                     station.geometry.coordinates[1],
                     station.geometry.coordinates[0]
@@ -115,11 +113,9 @@ fetch(awsUrl)
                 if (station.properties.WG > 20) {
                     windHighlightClass = 'wind-20';
                 }
-                // https://leafletjs.com/reference-1.7.1.html#divicon
                 let windIcon = L.divIcon({
                     html: `<div class="wind-label ${windHighlightClass}">${station.properties.WG}</div>`,
                 });
-                // https://leafletjs.com/reference-1.7.1.html#marker
                 let windMarker = L.marker([
                     station.geometry.coordinates[1],
                     station.geometry.coordinates[0]
@@ -127,8 +123,6 @@ fetch(awsUrl)
                     icon: windIcon
                 });
                 windMarker.addTo(overlays.windspeed);
-            }
-                //ab hier mein Versuch
             }
             if (typeof station.properties.LT == "number") {
                 let marker = newLabel(station.geometry.coordinates, {
