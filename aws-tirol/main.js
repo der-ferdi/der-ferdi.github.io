@@ -31,7 +31,7 @@ let layerControl = L.control.layers({
     ])
 }, {
     "Wetterstationen Tirol": overlays.stations,
-    "Temperatur (C)": overlays.temperature,
+    "Temperatur (°C)": overlays.temperature,
     "Schneehöhe (cm)": overlays.snowheight,
     "Windgeschwindigkeit (km/h)": overlays.windspeed,
     "Windrichtung": overlays.winddirection
@@ -43,6 +43,17 @@ overlays.temperature.addTo(map);
 L.control.scale({
     imperial: false
 }).addTo(map);
+
+let newLabel = (coords, options) => {
+    console.log("Koordinaten coords: ", coords);
+    console.log("Optionsobjekt:", options);
+    let marker = L.marker([coords[1], coords[0]]);
+    console.log("Marker:", marker);
+    return marker;
+    
+    //Label erstellen
+    //den Label zurückgeben
+};
 
 
 //Einbezug der Wetterdaten
@@ -121,28 +132,13 @@ fetch(awsUrl)
 
                 //ab hier mein Versuch
             }
-            if (typeof station.properties.LT =="number") {
-                let tempHighlightClass = '';
-                if (station.properties.LT >= 0) {
-                    tempHighlightClass = 'temp-pos';
-                }
-                if (station.properties.LT <= 0) {
-                    tempHighlightClass = 'temp-neg';
-                }
-                //https://leafletjs.com/reference-1.7.1.html#divicon
-                let tempIcon = L.divIcon({
-                    html: `<div class="temp-label ${tempHighlightClass}">${station.properties.LT}</div>`,
+            if (typeof station.properties.LT == "number") {
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.LT
                 });
-                //https://leafletjs.com/reference-1.7.1.html#marker
-                let tempMarker = L.marker([
-                    station.geometry.coordinates[1],
-                    station.geometry.coordinates[0]
-                ], {
-                    icon: tempIcon
-                });
-                tempMarker.addTo(overlay.temperature);
+                marker.addTo(overlays.temperature);
             }
         }
         // set map view to all stations
-        map.fitBounds(overlay.stations.getBounds());
+        map.fitBounds(overlays.stations.getBounds());
     });
