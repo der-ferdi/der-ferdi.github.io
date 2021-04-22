@@ -11,6 +11,15 @@ let map = L.map("map", {
 });
 
 //https://leafletjs.com/reference-1.7.1.html#control
+let.overlays = {
+    stations: L.featureGroup(),
+    temperature: L.featureGroup(),
+    snowheight: L.featureGroup(),
+    windspeed: L.featureGroup(),
+    winddirection: L.featureGroup()
+};
+
+
 let layerControl = L.control.layers({
     "BasemapAT.grau": basemapGray,
     //https://leafletjs.com/reference-1.7.1.html#tilelayer
@@ -20,7 +29,14 @@ let layerControl = L.control.layers({
         L.tileLayer.provider('BasemapAT.orthofoto'),
         L.tileLayer.provider('BasemapAT.overlay')
     ])
+}, {
+    "Wetterstationen Tirol": overlays.stations,
+    "Temperatur (C)": overlays.temperature,
+    "Schneehöhe (cm)": overlays.snowheight,
+    "Windgeschwindigkeit (km/h)": overlays.windspeed,
+    "Windrichtung": overlays.winddirection
 }).addTo(map);
+overlays.temperature.addTo(map);
 
 //Einbezug der Wetterdaten
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
@@ -65,7 +81,7 @@ fetch(awsUrl)
             </ul>
             <a target="_blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
-            marker.addTo(awsLayer);
+            marker.addTo(overlays.station);
             if (station.properties.HS) {
                 let highlightClass = '';
                 if (station.properties.HS > 100) {
@@ -85,7 +101,7 @@ fetch(awsUrl)
                 ], {
                     icon: snowIcon
                 });
-                snowMarker.addTo(snowLayer);
+                snowMarker.addTo(overlays.snowheight);
             }
             if (station.properties.WG) {
                 let windHighlightClass = '';
@@ -129,9 +145,9 @@ fetch(awsUrl)
                 ], {
                     icon: tempIcon
                 });
-                tempMarker.addTo(tempLayer);
+                tempMarker.addTo(overlay.temperature);
             }
         }
         // set map view to all stations
-        map.fitBounds(awsLayer.getBounds());
+        map.fitBounds(overlay.stations.getBounds());
     });
