@@ -19,10 +19,9 @@ let overlays = {
     winddirection: L.featureGroup()
 };
 
-
-let layerControl = L.control.layers({
+ //https://leafletjs.com/reference-1.7.1.html#tilelayer
+ let layerControl = L.control.layers({
     "BasemapAT.grau": basemapGray,
-    //https://leafletjs.com/reference-1.7.1.html#tilelayer
     "BasemapAT.orthofoto": L.tileLayer.provider('BasemapAT.orthofoto'),
     "BasemapAT.surface": L.tileLayer.provider('BasemapAT.surface'),
     "BasemapAT.overlay+ortho": L.layerGroup([
@@ -33,12 +32,13 @@ let layerControl = L.control.layers({
     "Wetterstationen Tirol": overlays.stations,
     "Temperatur (°C)": overlays.temperature,
     "Schneehöhe (cm)": overlays.snowheight,
-    "Windgeschwindigkeit (km/h)": overlays.windspeed,
+    "Windgeschwindigkeit (km/h)":  overlays.windspeed,
     "Windrichtung": overlays.winddirection
 }, {
     collapsed: false  //dauerhaftes Ausklappen des Kontrollelements
 }).addTo(map);
 overlays.temperature.addTo(map);
+
 //Maßstab einbauen
 L.control.scale({
     imperial: false
@@ -50,11 +50,9 @@ let newLabel = (coords, options) => {
     let marker = L.marker([coords[1], coords[0]]);
     console.log("Marker:", marker);
     return marker;
-    
+};
     //Label erstellen
     //den Label zurückgeben
-};
-
 
 //Einbezug der Wetterdaten
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
@@ -64,7 +62,7 @@ let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
 
 //Lädt Daten und verarbeitet sie weiter
 fetch(awsUrl)
-    .then(response => response.json()) //Antwort wird in json konvertiert
+    .then(response => response.json())
     .then(json => {
         console.log('Daten konvertiert: ', json);
         for (station of json.features) {
@@ -83,12 +81,12 @@ fetch(awsUrl)
               <li>Temperatur: ${station.properties.LT} C</li>
               <li>Schneehöhe: ${station.properties.HS || '?'} cm</li>
               <li>Windgeschwindigkeit: ${station.properties.WG || '?'} km/h</li>
-              <li>Windgeschwindrichtung: ${station.properties.WR || '?'}</li>
+              <li>Windrichtung: ${station.properties.WR || '?'}</li>
             </ul>
             <a target="_blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
-            marker.addTo(overlays.station);
-            if (typeof station.properties.HS == "numbers") {
+            marker.addTo(overlays.stations);
+            if (typeof station.properties.HS == "number") {
                 let highlightClass = '';
                 if (station.properties.HS > 100) {
                     highlightClass = 'snow-100';
@@ -117,11 +115,11 @@ fetch(awsUrl)
                 if (station.properties.WG > 20) {
                     windHighlightClass = 'wind-20';
                 }
-                //https://leafletjs.com/reference-1.7.1.html#divicon
+                // https://leafletjs.com/reference-1.7.1.html#divicon
                 let windIcon = L.divIcon({
                     html: `<div class="wind-label ${windHighlightClass}">${station.properties.WG}</div>`,
                 });
-                //https://leafletjs.com/reference-1.7.1.html#marker
+                // https://leafletjs.com/reference-1.7.1.html#marker
                 let windMarker = L.marker([
                     station.geometry.coordinates[1],
                     station.geometry.coordinates[0]
@@ -129,7 +127,7 @@ fetch(awsUrl)
                     icon: windIcon
                 });
                 windMarker.addTo(overlays.windspeed);
-
+            }
                 //ab hier mein Versuch
             }
             if (typeof station.properties.LT == "number") {
