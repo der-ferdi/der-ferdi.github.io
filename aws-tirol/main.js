@@ -98,6 +98,7 @@ fetch(awsUrl)
               <li>Schneehöhe: ${station.properties.HS || '?'} cm</li>
               <li>Windgeschwindigkeit: ${station.properties.WG || '?'} km/h</li>
               <li>Windrichtung: ${station.properties.WR || '?'}</li>
+              <li>Relative Luftfeuchtigkeit: ${station.poperties.RH} </li>
             </ul>
             <a target="_blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
