@@ -33,7 +33,8 @@ let overlays = {
     "Temperatur (°C)": overlays.temperature,
     "Schneehöhe (cm)": overlays.snowheight,
     "Windgeschwindigkeit (km/h)":  overlays.windspeed,
-    "Windrichtung": overlays.winddirection
+    "Windrichtung": overlays.winddirection,
+    "Relative Luftfeuchtigkeit": overlays.humidity
 }, {
 // Kontrollelement dauerhaft ausgeklappt
     collapsed: false
