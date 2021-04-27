@@ -57,6 +57,14 @@ let getColor = (value, colorRamp) => {
     return "black";
 };
 
+let getDirection = (value, directionRamp) => {
+    for (let rule of directionRamp) {
+        if (value >= rule.min && value < rule.max) {
+            return rule.dir;
+        }
+    }
+}
+
 let newLabel = (coords, options) => {
     let color = getColor(options.value, options.colors);
     //console.log("Wert", options.value, "bekommt Farbe", color);
