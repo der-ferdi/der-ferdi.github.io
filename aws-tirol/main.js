@@ -19,8 +19,8 @@ let overlays = {
     winddirection: L.featureGroup()
 };
 
- // https://leafletjs.com/reference-1.7.1.html#tilelayer
- let layerControl = L.control.layers({
+// https://leafletjs.com/reference-1.7.1.html#tilelayer
+let layerControl = L.control.layers({
     "BasemapAT.grau": basemapGray,
     "BasemapAT.orthofoto": L.tileLayer.provider('BasemapAT.orthofoto'),
     "BasemapAT.surface": L.tileLayer.provider('BasemapAT.surface'),
@@ -32,11 +32,11 @@ let overlays = {
     "Wetterstationen Tirol": overlays.stations,
     "Temperatur (°C)": overlays.temperature,
     "Schneehöhe (cm)": overlays.snowheight,
-    "Windgeschwindigkeit (km/h)":  overlays.windspeed,
+    "Windgeschwindigkeit (km/h)": overlays.windspeed,
     "Windrichtung": overlays.winddirection,
     "Relative Luftfeuchtigkeit": overlays.humidity
 }, {
-// Kontrollelement dauerhaft ausgeklappt
+    // Kontrollelement dauerhaft ausgeklappt
     collapsed: false
 }).addTo(map);
 overlays.temperature.addTo(map);
@@ -78,8 +78,8 @@ let newLabel = (coords, options) => {
     });
     return marker;
 };
-    // Label erstellen
-    // den Label zurückgeben
+// Label erstellen
+// den Label zurückgeben
 
 // Einbezug der Wetterdaten
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
@@ -96,6 +96,9 @@ fetch(awsUrl)
                 station.geometry.coordinates[1],
                 station.geometry.coordinates[0]
             ]);
+            if (typeof direction == "number") {
+            let direction = getDirection(station.properties.WR, DIRECTIONS)
+            };
             let formattedDate = new Date(station.properties.date);
             marker.bindPopup(`
             <h3>${station.properties.name}</h3>
@@ -105,13 +108,13 @@ fetch(awsUrl)
               <li>Temperatur: ${station.properties.LT} C</li>
               <li>Schneehöhe: ${station.properties.HS || '?'} cm</li>
               <li>Windgeschwindigkeit: ${station.properties.WG || '?'} km/h</li>
-              <li>Windrichtung: ${station.properties.WR || '?'}</li>
+              <li>Windrichtung: ${direction || '?'}</li>
               <li>Relative Luftfeuchtigkeit: ${station.poperties.RH} </li>
             </ul>
             <a target="_blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
             marker.addTo(overlays.stations);
-            
+
             if (typeof station.properties.HS == "number") {
                 let marker = newLabel(station.geometry.coordinates, {
                     value: station.properties.HS.toFixed(0),
