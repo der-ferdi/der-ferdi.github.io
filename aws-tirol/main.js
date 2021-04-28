@@ -96,9 +96,11 @@ fetch(awsUrl)
                 station.geometry.coordinates[1],
                 station.geometry.coordinates[0]
             ]);
-            if (typeof direction == "number") {
-            let direction = getDirection(station.properties.WR, DIRECTIONS)
-            };
+            if (typeof station.properties.WR == "number") {
+                let direction = getDirection(station.properties.WR, DIRECTIONS)
+            } else {
+                direction ="NA"
+            }
             let formattedDate = new Date(station.properties.date);
             marker.bindPopup(`
             <h3>${station.properties.name}</h3>
