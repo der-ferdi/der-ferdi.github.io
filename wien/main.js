@@ -49,6 +49,7 @@ let layerControl = L.control.layers({
 overlays.busLines.addTo(map);
 overlays.busStops.addTo(map);
 overlays.pedAreas.addTo(map);
+overlays.sightPoints.addTo(map);
 
 let drawBusStop = (geojsonData) => {
     L.geoJson(geojsonData, {
@@ -115,6 +116,26 @@ let drawPedestrianAreas = (geojsonData) => {
     }).addTo(overlays.pedAreas);
 }
 
+let drawSightseeingPoints = (geojsonData) => {
+    console.log('Sehenswürdigkeit: ', geojsonData);
+    L.geoJson(geojsonData, {
+        style: (feature) => {
+            return {
+                stroke: true,
+                fillColor: "yellow",
+                color: "silver",
+            }
+        },
+        onEachFeature: (feature, layer) => {
+            layer.bindPopup(`<strong>Sehenswürdigkeit ${feature.properties.ADRESSE}</strong>
+            <hr>
+            ${feature.properties.NAME || ""} <br>
+            ${feature.properties.ADRESSE || ""}
+            `);
+        }
+    }).addTo(overlays.sightPoints);
+}
+
 for (let config of OGDWIEN) {
     // console.log("Config: ", config.data);
     fetch(config.data)
@@ -127,6 +148,8 @@ for (let config of OGDWIEN) {
                 drawBusLines(geojsonData);
             } else if (config.title ==="Fußgängerzonen") {
                 drawPedestrianAreas(geojsonData);
+            } else if (config.title === "Sehenswürdigkeiten") {
+                drawSightseeingPoints(geosjonData);
             }
         })
 }
