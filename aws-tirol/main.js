@@ -16,8 +16,10 @@ let overlays = {
     temperature: L.featureGroup(),
     snowheight: L.featureGroup(),
     windspeed: L.featureGroup(),
-    winddirection: L.featureGroup()
+    winddirection: L.featureGroup(),
+    humidity: L.featureGroup(),
 };
+console.log(overlays.stations);
 
 // https://leafletjs.com/reference-1.7.1.html#tilelayer
 let layerControl = L.control.layers({
