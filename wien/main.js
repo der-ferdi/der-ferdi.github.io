@@ -18,7 +18,7 @@ let overlays = {
     busLines: L.featureGroup(),
     busStops: L.featureGroup(),
     pedAreas: L.featureGroup(),
-    sightPoints: L.featureGroup()
+    sights: L.featureGroup()
 };
 
 // Karte initialisieren und auf Wiens Wikipedia Koordinate blicken
@@ -42,14 +42,14 @@ let layerControl = L.control.layers({
     "Liniennetz Vienna Sightseeing": overlays.busLines,
     "Haltestellen Vienna Sightseeing": overlays.busStops,
     "Fußgängerzonen": overlays.pedAreas,
-    "Sehenswürdigkeiten": overlays.sightPoints
+    "Sehenswürdigkeiten": overlays.sights
 }).addTo(map);
 
 // alle Overlays nach dem Laden anzeigen
 overlays.busLines.addTo(map);
 overlays.busStops.addTo(map);
 overlays.pedAreas.addTo(map);
-overlays.sightPoints.addTo(map);
+overlays.sights.addTo(map);
 
 let drawBusStop = (geojsonData) => {
     L.geoJson(geojsonData, {
@@ -66,7 +66,8 @@ let drawBusStop = (geojsonData) => {
                 })
             })
         },
-        attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>, <a href="https://mapicons.mapsmarker.com">Maps Icons Collection</a>'
+        // attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>, <a href="https://mapicons.mapsmarker.com">Maps Icons Collection</a>'
+        attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>'
     }).addTo(overlays.busStops);
 }
 
@@ -79,20 +80,13 @@ let drawBusLines = (geojsonData) => {
                 color: col
             }
         },
-       //     let col = "red";
-         //   if (feature.properties.LINE_NAME == 'Blue Line') {
-         //       col = COLORS.buslines["Blue Line"];
-         //   if (feature.properties.LINE_NAME == 'Grey Line') {
-         //       col = COLORS.buslines["Grey Line"];
-         //   if (feature.properties.LINE_NAME == 'Grey Line') {
-         //        col = COLORS.buslines["Grey Line"];
-
         onEachFeature: (feature, layer) => {
             layer.bindPopup(`<strong>${feature.properties.LINE_NAME}</strong>
             <hr>
             von ${feature.properties.FROM_NAME}<br>
             nach ${feature.properties.TO_NAME}`)
-        }
+        },
+        attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>'
     }).addTo(overlays.busLines);
 }
 
@@ -102,8 +96,9 @@ let drawPedestrianAreas = (geojsonData) => {
         style: (feature) => {
             return {
                 stroke: true,
-                fillColor: "yellow",
                 color: "silver",
+                fillColor: "yellow",
+                fillOpacity: 0.3
             }
         },
         onEachFeature: (feature, layer) => {
@@ -112,30 +107,33 @@ let drawPedestrianAreas = (geojsonData) => {
             ${feature.properties.ZEITRAUM || ""} <br>
             ${feature.properties.AUSN_TEXT || ""}
             `);
-        }
+        },
+        attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>'
     }).addTo(overlays.pedAreas);
 }
 
-let drawSightseeingPoints = (geojsonData) => {
-    console.log('Sehenswürdigkeit: ', geojsonData);
+let drawSites = (geojsonData) => {
     L.geoJson(geojsonData, {
-        style: (feature) => {
-            return {
-                stroke: true,
-                fillColor: "yellow",
-                color: "silver",
-            }
-        },
         onEachFeature: (feature, layer) => {
-            layer.bindPopup(`<strong>Sehenswürdigkeit ${feature.properties.ADRESSE}</strong>
-            <hr>
-            ${feature.properties.NAME || ""} <br>
-            ${feature.properties.ADRESSE || ""}
-            `);
-        }
-    }).addTo(overlays.sightPoints);
+            layer.bindPopup(`
+                <img src="${feature.properties.THUMBNAIL}" alt="Vorschaubild"><br>
+                <strong>${feature.properties.NAME}</strong>
+                <hr>
+                Adresse: ${feature.properties.ADRESSE}<br>
+                <a href="${feature.properties.WEITERE_INF}">Weblink</a>
+            `)
+        },
+        pointToLayer: (geoJsonPoint, latlng) => {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: 'icons/sehenswuerdigogd.png',
+                    iconSize: [38, 38]
+                })
+            })
+        },
+        attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>'
+    }).addTo(overlays.sights);
 }
-
 for (let config of OGDWIEN) {
     // console.log("Config: ", config.data);
     fetch(config.data)
@@ -146,10 +144,10 @@ for (let config of OGDWIEN) {
                 drawBusStop(geojsonData);
             } else if (config.title == "Liniennetz Vienna Sightseeing") {
                 drawBusLines(geojsonData);
-            } else if (config.title ==="Fußgängerzonen") {
+            } else if (config.title === "Fußgängerzonen") {
                 drawPedestrianAreas(geojsonData);
-            } else if (config.title === "Sehenswürdigkeiten") {
-                drawSightseeingPoints(geosjonData);
+            } else if (config.title === "Sehenswürdigkeiten Standorte") {
+                drawSites(geojsonData);
             }
         })
 }
