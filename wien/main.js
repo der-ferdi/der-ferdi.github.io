@@ -163,3 +163,9 @@ var miniMap = new L.Control.MiniMap(
         minimized: false
     }
 ).addTo(map);
+
+// Reachability plugin
+L.control.reachability({
+    // add settings/options here
+    apiKey: '5b3ce3597851110001cf6248118286b5a92d44f882b7ffb9bb6b2166'
+}).addTo(map);
