@@ -23,6 +23,7 @@ let overlays = {
 
 // Karte initialisieren und auf Wiens Wikipedia Koordinate blicken
 let map = L.map("map", {
+    fullscreenControl: true,
     center: [48.208333, 16.373056],
     zoom: 13,
     layers: [
@@ -62,7 +63,7 @@ let drawBusStop = (geojsonData) => {
             return L.marker(latlng, {
                 icon: L.icon({
                     iconUrl: 'icons/busstop.png',
-                    iconSize: [38, 38]
+                    iconSize: [32, 37]
                 })
             })
         },
@@ -127,7 +128,7 @@ let drawSites = (geojsonData) => {
             return L.marker(latlng, {
                 icon: L.icon({
                     iconUrl: 'icons/sehenswuerdigogd.png',
-                    iconSize: [38, 38]
+                    iconSize: [32, 32]
                 })
             })
         },
@@ -151,3 +152,6 @@ for (let config of OGDWIEN) {
             }
         })
 }
+
+// Leaflet hash
+L.hash(map);
